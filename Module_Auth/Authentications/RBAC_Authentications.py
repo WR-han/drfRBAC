@@ -2,8 +2,8 @@ import jwt
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 
-from APP_RBAC.models import User
-from Module_Public.key import RBAC_token_salt
+from APPS.RBAC.models import User
+from Module_Key.key import RBAC_token_salt  # 用户盐
 
 
 class RBACAuthentication(BaseAuthentication):
@@ -21,4 +21,3 @@ class RBACAuthentication(BaseAuthentication):
             raise AuthenticationFailed("token超时")
         except Exception as e:
             raise AuthenticationFailed(e)
-

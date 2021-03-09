@@ -1,7 +1,7 @@
 import datetime
 import jwt
 
-from Module_Public.key import RBAC_token_salt
+from Module_Key.key import RBAC_token_salt
 
 
 def make_rbac_token(user_id, expire_hour=24):
