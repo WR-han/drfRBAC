@@ -41,9 +41,9 @@ class Identity(BaseModel):
     """
 
     superior = models.ForeignKey("self", blank=True, default="", on_delete=models.SET_DEFAULT,
-                                 related_name="lowerLevel", verbose_name="上级", db_constraint=True)
+                                 related_name="lowerLevel", verbose_name="上级", db_constraint=False)
     Group = models.ForeignKey("RBAC.Group", blank=True, default="", on_delete=models.SET_DEFAULT,
-                              related_name="Identity", verbose_name="分组", db_constraint=True)
+                              related_name="Identity", verbose_name="分组", db_constraint=False)
     Permissions = models.ManyToManyField("RBAC.Permissions", verbose_name="权限",
                                          through="RBAC.IdentityPermissions", related_name="Identity")
 
@@ -97,9 +97,9 @@ class UserIdentity(BaseModel):
     """
 
     User = models.ForeignKey("RBAC.User", on_delete=models.CASCADE, verbose_name="用户",
-                             related_name="UserIdentity", db_constraint=True)
+                             related_name="UserIdentity", db_constraint=False)
     identity = models.ForeignKey("RBAC.Identity", on_delete=models.CASCADE, verbose_name="身份",
-                                 related_name="UserIdentity", db_constraint=True)
+                                 related_name="UserIdentity", db_constraint=False)
 
     def __str__(self):
         return f"RBAC_{self.identity.name}_{self.User.nickName}"
@@ -116,9 +116,9 @@ class UserPermissions(BaseModel):
     """
 
     User = models.ForeignKey("RBAC.User", on_delete=models.CASCADE, verbose_name="用户",
-                             related_name="UserPermissions", db_constraint=True)
+                             related_name="UserPermissions", db_constraint=False)
     Permissions = models.ForeignKey("RBAC.Permissions", on_delete=models.CASCADE, verbose_name="权限",
-                                    related_name="UserPermissions", db_constraint=True)
+                                    related_name="UserPermissions", db_constraint=False)
 
     def __str__(self):
         return f"RBAC_{self.User.nickName}_{self.Permissions.name}"
@@ -135,9 +135,9 @@ class IdentityPermissions(BaseModel):
     """
 
     identity = models.ForeignKey("RBAC.Identity", on_delete=models.CASCADE, verbose_name="身份",
-                                 related_name="IdentityPermissions", db_constraint=True)
+                                 related_name="IdentityPermissions", db_constraint=False)
     Permissions = models.ForeignKey("RBAC.Permissions", on_delete=models.CASCADE, verbose_name="权限",
-                                    related_name="IdentityPermissions", db_constraint=True)
+                                    related_name="IdentityPermissions", db_constraint=False)
 
     def __str__(self):
         return f"RBAC_{self.identity.name}_{self.Permissions.name}"
