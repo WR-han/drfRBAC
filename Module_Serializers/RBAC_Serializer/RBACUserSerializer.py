@@ -1,10 +1,9 @@
 from rest_framework import serializers
 
-from APPS.RBAC.models import RBACUser
+from APPS.RBAC.models import User
 
 
-class RBACUserSerializer(serializers.ModelSerializer):
-
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RBACUser
+        model = User
         fields = "__all__"

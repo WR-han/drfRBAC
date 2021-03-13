@@ -9,6 +9,10 @@ from Module_Custom.Custom_Exception import PermissionFailed
 
 
 class SecondaryPermission(BasePermission):
+    """
+    所有继承 SecondaryPermission类 的权限类皆为二级权限类
+    二级权限类只能配置在 action (当前页line57) 装饰器的 permission参数中
+    """
 
     def has_permission(self, request, view):
 
@@ -29,6 +33,10 @@ class SecondaryPermission(BasePermission):
 
 
 class MainPermission(SecondaryPermission):
+    """
+    所有继承 MainPermission类 的权限类皆为一级权限类
+    只能配置在 ModelViewSet => permission_classes 中
+    """
 
     def has_permission(self, request, view):
         base_action = ["list", "retrieve", "create", "update", "partial_update", "destroy"]
@@ -48,29 +56,35 @@ class MainPermission(SecondaryPermission):
 
 def action(methods=None, detail=None, url_path=None, url_name=None, permission=None, inherit=True, **wra_kwargs):
     """
-    :param permission:
-        二级权限类（自定义的二级权限类） 或 使用通用权限类时自动生成的权限名称（对应Permission表中的name字段）
-        e.g.
+    :param permission: class/str
+        class: 自定义的二级权限类
+        str: 使用通用权限类时自动生成的权限名称（对应Permission表中的name字段）
 
-        @action(methods=["get"], detail=False, permission="部分用户")
-        def PartUser(self, request):
-            ...
+        permission为str时  e.g.:
+            @action(methods=["get"], detail=False, permission="部分用户")
+            def PartUser(self, request):
+                ...
 
         自动生成Permissions表数据:
-        name            codeName
-        ---------------------------
-        获取部分用户	GET_PartUser
-        修改部分用户	PUT_PartUser
-        创建部分用户	POST_PartUser
-        删除部分用户	DELETE_PartUser
+            name            codeName
+            -------------------------------
+            获取部分用户	    GET_PartUser
+            修改部分用户	    PUT_PartUser
+            创建部分用户	    POST_PartUser
+            删除部分用户	    DELETE_PartUser
 
-    :param inherit: 是否继承一级权限的结果
-        是否继承一级权限的认证结果（permission_classes中的权限类）
+    :param inherit: bool
+        是否继承一级权限（permission_classes中的权限类）的认证结果
         值为True（默认）
             一级权限通过 则无需验证二级权限
             一级权限未通过 再验证二级权限
         值为False
             无论一级权限通过与否 必须验证二级权限
+
+    :param methods: 参见源码
+    :param detail: 参见源码
+    :param url_path: 参见源码
+    :param url_name: 参见源码
     """
     methods = ['get'] if (methods is None) else methods
     methods = [method.lower() for method in methods]
@@ -112,7 +126,6 @@ def action(methods=None, detail=None, url_path=None, url_name=None, permission=N
             view, request = args
             # 是否进行了一级权限验证 True/False为经过检测 None为一级无需检测
             main_permission = getattr(request, "main_permission", None)
-            print(main_permission)
 
             # permission参数 分 3种 None str 自定义permission类
             if isinstance(permission, str):
@@ -120,10 +133,10 @@ def action(methods=None, detail=None, url_path=None, url_name=None, permission=N
                 check = GeneralPermission().has_permission(view=view, request=request)
 
                 if inherit and main_permission:
-                    # 允许继承一级权限 且 拥有一级权限
+                    # 允许继承一级权限 且 检查通过拥有一级权限
                     return func(*args, **kwargs)
                 elif check:
-                    # 不能继承一级权限 或者 没有一级权限 判断是否有当前的二级权限
+                    # 不允许继承一级权限 或者 没有一级权限 判断是否有当前的二级权限
                     return func(*args, **kwargs)
                 else:
                     raise PermissionFailed
@@ -135,13 +148,13 @@ def action(methods=None, detail=None, url_path=None, url_name=None, permission=N
                     # 允许继承一级权限 且 拥有一级权限
                     return func(*args, **kwargs)
                 elif check:
-                    # 不能继承一级权限 或者 没有一级权限 判断是否有当前的二级权限
+                    # 不允许继承一级权限 或者 没有一级权限 判断是否有当前的二级权限
                     return func(*args, **kwargs)
                 else:
                     raise PermissionFailed
             elif (main_permission is True) or (main_permission is None):
-                # 1. 有主权限且通过并且没有二级权限
-                # 2. 没有主权限（主权限为None）并且没有二级权限
+                # 1. 有一级权限且通过并且没有二级权限
+                # 2. 没有一级权限（一级权限为None）并且没有二级权限
                 return func(*args, **kwargs)
             else:
                 raise PermissionFailed

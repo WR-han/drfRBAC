@@ -37,7 +37,7 @@ class User(AccountModel):
 
 class Identity(BaseModel):
     """
-    身份表（可作为身份类型）
+    身份表（可作为岗位类型）
     """
 
     superior = models.ForeignKey("self", blank=True, default="", on_delete=models.SET_DEFAULT,

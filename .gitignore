@@ -7,8 +7,7 @@ key.py
 __pycache__
 db.sqlite3
 media
-Module_Key
- 
+migrations
 # Backup files #
 *.bak
  

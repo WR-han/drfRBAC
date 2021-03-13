@@ -21,4 +21,3 @@ def make_rbac_token(user_id, expire_hour=24):
     token = jwt.encode(playload, RBAC_token_salt, algorithm='HS256')
 
     return token
-
