@@ -6,5 +6,5 @@ from APPS.RBAC import urls as rbac
 urlpatterns = [
     path('admin/', admin.site.urls),
     # TODO DEMO ↓
-    path('v1/Business/', include(rbac))
+    path('v1/RBAC/', include(rbac))
 ]
