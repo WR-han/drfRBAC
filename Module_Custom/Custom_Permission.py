@@ -116,9 +116,13 @@ def action(methods=None, detail=None, url_path=None, url_name=None, permission=N
 
             # 创建Permission表数据
             prefixes = [('GET', '获取'), ('PUT', '修改'), ('POST', '创建'), ('DELETE', '删除')]
-            for prefix in prefixes:
-                Permissions.objects.get_or_create(name=f"{prefix[1]}{permission}",
-                                                  codeName=f"{prefix[0]}_{GeneralPermission.__name__}")
+            try:
+                for prefix in prefixes:
+                    Permissions.objects.get_or_create(name=f"{prefix[1]}{permission}",
+                                                      codeName=f"{prefix[0]}_{GeneralPermission.__name__}")
+                    print(f"<{prefix[1]}{permission}> 权限创建成功")
+            except Exception as e:
+                print(f"权限数据未创建，请先进行migrate操作,{e}")
 
         @wraps(func)
         def decorated(*args, **kwargs):
