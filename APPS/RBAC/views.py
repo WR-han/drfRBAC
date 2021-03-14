@@ -19,15 +19,14 @@ class Users(ModelViewSet):
 
     # 二级权限认证 DEMO_1 ↓
     # permission参数为字符串时 使用默认权限类
-    # 生成以 被装饰的类方法名identity_user作为codeName值 / permission参数作为name值 的权限表数据
+    # 生成以 被装饰的类方法名role_user作为codeName值 / permission参数作为name值 的权限表数据
     # 生成权限表数据方式详见 Module_Custom.Custom_Permission.action => DEMO
-    # inherit为True 此时继承一级权限结果 UserPermission 认证通过则无需认证identity_user权限
-    @action(methods=["get"], detail=False, permission="指定身份用户", inherit=True)
-    def identity_user(self, request):
+    # inherit为True 此时继承一级权限结果 UserPermission 认证通过则无需认证role_user权限
+    @action(methods=["get"], detail=False, permission="指定角色用户", inherit=True)
+    def role_user(self, request):
         """
-        指定身份用户接口
+        某一角色的用户接口
         """
-        print(request.user)
         return Response({
             "code": 200
         })
@@ -39,9 +38,8 @@ class Users(ModelViewSet):
     @action(methods=["get"], detail=False, permission=GroupUserPermission, inherit=False)
     def group_user(self, request):
         """
-        指定身份用户接口
+        某一分组的用户接口
         """
-        print(request.user)
         return Response({
             "code": 200
         })

@@ -7,8 +7,8 @@ class User(AccountModel):
     """
     用户
     """
-    identity = models.ManyToManyField("RBAC.Identity", verbose_name="身份", through="RBAC.UserIdentity",
-                                      related_name="User")
+    Role = models.ManyToManyField("RBAC.Role", verbose_name="角色", through="RBAC.UserRole",
+                                  related_name="User")
     Permissions = models.ManyToManyField("RBAC.Permissions", verbose_name="权限", through="RBAC.UserPermissions",
                                          related_name="User")
 
@@ -19,11 +19,11 @@ class User(AccountModel):
         :return:
         """
         my_permissions = [my_pm.codeName for my_pm in self.Permissions.all()]
-        my_identity = self.identity.all()
-        identity_permission = []
-        for dep in my_identity:
-            identity_permission += [dep_pm.codeName for dep_pm in dep.Permissions.all()]
-        my_permissions += identity_permission
+        my_role = self.Role.all()
+        role_permission = []
+        for dep in my_role:
+            role_permission += [dep_pm.codeName for dep_pm in dep.Permissions.all()]
+        my_permissions += role_permission
         return my_permissions
 
     def __str__(self):
@@ -35,26 +35,26 @@ class User(AccountModel):
         verbose_name_plural = verbose_name
 
 
-class Identity(BaseModel):
+class Role(BaseModel):
     """
-    身份表（可作为岗位类型）
+    角色表（可作为岗位类型）
     """
 
     superior = models.ForeignKey("self", blank=True, default="", on_delete=models.SET_DEFAULT,
                                  related_name="lowerLevel", verbose_name="上级", db_constraint=False)
     Group = models.ForeignKey("RBAC.Group", blank=True, default="", on_delete=models.SET_DEFAULT,
-                              related_name="Identity", verbose_name="分组", db_constraint=False)
+                              related_name="Role", verbose_name="分组", db_constraint=False)
     Permissions = models.ManyToManyField("RBAC.Permissions", verbose_name="权限",
-                                         through="RBAC.IdentityPermissions", related_name="Identity")
+                                         through="RBAC.RolePermissions", related_name="Role")
 
-    name = models.CharField("身份名称", max_length=15, unique=True)
+    name = models.CharField("角色名称", max_length=15, unique=True)
 
     def __str__(self):
-        return f"RBAC_身份_{self.name}"
+        return f"RBAC_角色_{self.name}"
 
     class Meta:
-        db_table = 'drfRBAC_Identity'
-        verbose_name = "2.身份表"
+        db_table = 'drfRBAC_Role'
+        verbose_name = "2.角色表"
         verbose_name_plural = verbose_name
 
 
@@ -91,22 +91,22 @@ class Permissions(BaseModel):
         verbose_name_plural = verbose_name
 
 
-class UserIdentity(BaseModel):
+class UserRole(BaseModel):
     """
-    用户/身份关系表
+    用户/角色关系表
     """
 
     User = models.ForeignKey("RBAC.User", on_delete=models.CASCADE, verbose_name="用户",
-                             related_name="UserIdentity", db_constraint=False)
-    identity = models.ForeignKey("RBAC.Identity", on_delete=models.CASCADE, verbose_name="身份",
-                                 related_name="UserIdentity", db_constraint=False)
+                             related_name="UserRole", db_constraint=False)
+    Role = models.ForeignKey("RBAC.Role", on_delete=models.CASCADE, verbose_name="角色",
+                             related_name="UserRole", db_constraint=False)
 
     def __str__(self):
-        return f"RBAC_{self.identity.name}_{self.User.nickName}"
+        return f"RBAC_{self.Role.name}_{self.User.nickName}"
 
     class Meta:
-        db_table = 'drfRBAC_User_Identity'
-        verbose_name = "5.用户/身份关系表"
+        db_table = 'drfRBAC_User_Role'
+        verbose_name = "5.用户/角色关系表"
         verbose_name_plural = verbose_name
 
 
@@ -129,20 +129,20 @@ class UserPermissions(BaseModel):
         verbose_name_plural = verbose_name
 
 
-class IdentityPermissions(BaseModel):
+class RolePermissions(BaseModel):
     """
-    身份/权限关系表
+    角色/权限关系表
     """
 
-    identity = models.ForeignKey("RBAC.Identity", on_delete=models.CASCADE, verbose_name="身份",
-                                 related_name="IdentityPermissions", db_constraint=False)
+    Role = models.ForeignKey("RBAC.Role", on_delete=models.CASCADE, verbose_name="角色",
+                             related_name="RolePermissions", db_constraint=False)
     Permissions = models.ForeignKey("RBAC.Permissions", on_delete=models.CASCADE, verbose_name="权限",
-                                    related_name="IdentityPermissions", db_constraint=False)
+                                    related_name="RolePermissions", db_constraint=False)
 
     def __str__(self):
-        return f"RBAC_{self.identity.name}_{self.Permissions.name}"
+        return f"RBAC_{self.Role.name}_{self.Permissions.name}"
 
     class Meta:
-        db_table = 'drfRBAC_identity_permissions'
-        verbose_name = "7.身份/权限关系表"
+        db_table = 'drfRBAC_role_permissions'
+        verbose_name = "7.角色/权限关系表"
         verbose_name_plural = verbose_name
