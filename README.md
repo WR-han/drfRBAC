@@ -32,7 +32,7 @@
 	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客服**角色**拥有<访问**查看客户**接口>的权限 <br/>
 	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么所有**角色为客服的用户** 就都继承有<访问**查看客户**接口>的权限 <br/>
 	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果**用户**本身拥有<访问**查看客户**接口>的权限，那么当前用户在访问控制逻辑中就可以**视为客服** <br/>
-	 \* 只适用于 **访问控制逻辑** 不适用于 **业务逻辑**， 如接口内容为查看 **角色为客服的所有用户** <br/><br/>
+- \* 只适用于 **访问控制逻辑** 不适用于 **业务逻辑**， 如接口内容为查看 **角色为客服的所有用户** 
 - **用户**（user）可通过计算属性 **get_permissions** 来获取由**自己的权限** （UserRole）  和**继承自角色（identity）的权限** （RolePermissions） 组成的列表
 
 <br/>
@@ -40,7 +40,7 @@
 ## 3. 权限核心
 > \* 进行访问控制前需进行 **用户认证**，详见 Module_Auth.Authentications.RBAC_Authentications => DEMO
 - 所有接口 如果需要进行访问控制，**都可以 / 应该** 进行权限判断 （权限类可使用新的 **action装饰器** 快速**创建**，并自动**生成**对应数据，**无需**反复手动创建drf权限类）
-- 权限为访问控制的 **唯一核心** 无论什么身份，只要用户拥有权限，即可访问该权限的对应接口
+- 权限为访问控制的**唯一核心**，无论什么身份，只要用户拥有接口所需的权限，即可访问该接口，否则**访问会被拦截**
 
 
 <hr style=" border:solid; width:100px; height:1px;" color=#000000 size=1">
@@ -106,7 +106,7 @@ project_allowed_hosts = []
 - 使用 `/v1/RBAC/Login/` 接口获取 **token**  👇
 
 ![登录请求](https://img-blog.csdnimg.cn/20210315173807517.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1dSaGFu,size_16,color_FFFFFF,t_70#pic_center)
-- 请求头中 **携带token** 即可访问DEMO中提供的路由（需要拥有对应权限） 👇
+- 请求头中 **携带token** 即可访问DEMO中提供的路由（需要拥有对应权限，否则会被拦截） 👇
 
 ![token](https://img-blog.csdnimg.cn/20210315173833181.jpg#pic_center)
 - DEMO提供 **3个** 案例路由，对应所需权限如下表（每个路由对应 **增删改查** 四种权限）：
@@ -175,7 +175,9 @@ project_allowed_hosts = []
 </table>
 
 - 为用户分配某一权限，该用户即可用此权限对应的 **请求方式** 访问该权限对应的 **接口**
-
+- > e.g.  <br/>
+	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色**拥有** <获取全部用户信息GET_UserPermission> 权限时 ，即可对 **/v1/RBAC/user/** 接口进行 **GET** 请求<br/>
+	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色**没有** <创建指定角色用户POST_role_user> 权限时 ，若对 **/v1/RBAC/user/role_user/** 接口进行 **PUT** 请求，则会被**拦截**<br/>
 
 <hr style=" border:solid; width:100px; height:1px;" color=#000000 size=1">
 <br/>
