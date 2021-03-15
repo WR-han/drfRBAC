@@ -174,7 +174,7 @@ project_allowed_hosts = []
   </tbody>
 </table>
 
-- 为用户分配某一权限，即可以该权限对应的  **请求方式** 访问该权限对应的 **接口**
+- 为用户分配某一权限，该用户即可用此权限对应的 **请求方式** 访问该权限对应的 **接口**
 
 
 <hr style=" border:solid; width:100px; height:1px;" color=#000000 size=1">
