@@ -1,10 +1,36 @@
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from APPS.RBAC.models import User
+from Module_Auth.Authentications.RBAC_Authentications import UserAuthentication
 from Module_Auth.Permissions.RBAC_Permissions import UserPermission, GroupUserPermission
+from Module_Custom.Custom_Exception import LoginFailed
 from Module_Custom.Custom_Permission import action
+from Module_Custom.Custom_Token import make_rbac_token
 from Module_Serializers.RBAC_Serializer.RBACUserSerializer import UserSerializer
+
+
+# TODO LOGIN DEMO ↓
+class Login(APIView):
+    """
+    登录DEMO
+    """
+
+    def post(self, request):
+        account = request.data.get("account")
+        # DEMO使用未加密明文密码
+        password = request.data.get("password")
+        user = User.objects.filter(account=account, password=password).first()
+        if user:
+            token = make_rbac_token(user.id)
+        else:
+            raise LoginFailed
+
+        return Response({
+            "code": 200,
+            "token": token
+        })
 
 
 # TODO DEMO ↓
@@ -12,6 +38,9 @@ class Users(ModelViewSet):
     """
     所有用户
     """
+
+    # 用户认证
+    authentication_classes = [UserAuthentication]
     # 一级权限认证 ↓
     permission_classes = [UserPermission]
     queryset = User.objects.all()

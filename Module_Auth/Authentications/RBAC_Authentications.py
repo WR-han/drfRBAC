@@ -6,7 +6,8 @@ from APPS.RBAC.models import User
 from Module_Key.key import RBAC_token_salt  # 用户盐
 
 
-class RBACAuthentication(BaseAuthentication):
+# TODO DEMO ↓
+class UserAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
         token = request.META.get("HTTP_AUTHORIZATION", None)
