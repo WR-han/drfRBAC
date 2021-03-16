@@ -3,8 +3,8 @@
 <font color=#999AAA >基于Django REST framework的 **接口级别权限** 角色访问控制
 - 自动权限类生成
 - 自动权限表数据生成
-- 权限自动校验
-- 只需进行权限的分配
+- 自动权限校验
+- 只需着重于权限的分配
 <hr style=" border:solid; width:100px; height:1px;" color=#000000 size=1">
 
 <br/>
