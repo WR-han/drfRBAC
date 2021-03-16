@@ -11,7 +11,7 @@ from Module_Custom.Custom_Exception import PermissionFailed
 class SecondaryPermission(BasePermission):
     """
     所有继承 SecondaryPermission类 的权限类皆为二级权限类
-    二级权限类只能配置在 action (当前页line57) 装饰器的 permission参数中
+    二级权限类只能配置在 新action 装饰器的 permission参数中
     """
 
     def has_permission(self, request, view):
