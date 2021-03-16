@@ -4,7 +4,7 @@
 - 自动权限类生成
 - 自动权限表数据生成
 - 权限自动校验
-- 只需着重于权限的分配
+- 只需进行权限的分配
 <hr style=" border:solid; width:100px; height:1px;" color=#000000 size=1">
 
 <br/>
