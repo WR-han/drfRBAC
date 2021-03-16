@@ -1,6 +1,6 @@
 
 # drfRBAC
-<font color=#999AAA >基于Django REST framework的角色**权限**访问控制
+<font color=#999AAA >基于Django REST framework的 **接口级别权限** 角色访问控制
 - 自动权限类生成
 - 自动权限表数据生成
 - 权限自动校验
