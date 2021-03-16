@@ -1,10 +1,10 @@
 
 # drfRBAC
 <font color=#999AAA >基于Django REST framework的角色**权限**访问控制
-- 只需进行权限的分配
-- 权限类自动生成
-- 权限表数据自动生成
+- 自动权限类生成
+- 自动权限表数据生成
 - 权限自动校验
+- 只需着重于权限的分配
 <hr style=" border:solid; width:100px; height:1px;" color=#000000 size=1">
 
 <br/>
