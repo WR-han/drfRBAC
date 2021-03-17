@@ -230,9 +230,9 @@ project_allowed_hosts = []
 <br/>
 
 # <a id="二、推荐的路由层级">二、推荐的路由层级</a>
- > **示例1**：www.wrhan.cn/v1/RBAC/**user**/ <br/>
- > **示例2**：www.wrhan.cn/v1/RBAC/**user**/**role_user**/ <br/>
- > **示例3**：www.wrhan.cn/v1/RBAC/**group_user**/**role_user**/ <br/>
+ > **示例1**：.../v1/RBAC/**user**/ <br/>
+ > **示例2**：.../v1/RBAC/**user**/**role_user**/ <br/>
+ > **示例3**：.../v1/RBAC/**group_user**/**role_user**/ <br/>
 
 - 路由对应的 **含义** 👇：
  > **示例1**：域名/版本号/模块名/**所有用户**/ <br/>
@@ -295,7 +295,8 @@ class UserPermission(MainPermission):
 	- 一级权限往往表示对 **整个视图集所有自动路由接口** 的权限控制
 ```python
 class Users(ModelViewSet):
-    """一级权限认证 ↓""" 
+
+    # 一级权限认证 ↓
     permission_classes = [UserPermission]
 
     authentication_classes = [UserAuthentication]
@@ -306,7 +307,7 @@ class Users(ModelViewSet):
 <br/>
 
 ### <a id="二级权限类">2.2 二级权限类</a>
-> 所有继承自 **SecondaryPermission类** 的权限类皆为 **一级权限类**
+> 所有继承自 **SecondaryPermission类** 的权限类皆为 **二级权限类**
 
 <br/>
 
