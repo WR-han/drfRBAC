@@ -59,28 +59,8 @@ def action(methods=None, detail=None, url_path=None, url_name=None, permission=N
     :param permission: class/str
         class: 自定义的二级权限类
         str: 使用通用权限类时自动生成的权限名称（对应Permission表中的name字段）
-
-        permission为str时  e.g.:
-            @action(methods=["get"], detail=False, permission="部分用户")
-            def PartUser(self, request):
-                ...
-
-        自动生成Permissions表数据:
-            name            codeName
-            -------------------------------
-            获取部分用户	    GET_PartUser
-            修改部分用户	    PUT_PartUser
-            创建部分用户	    POST_PartUser
-            删除部分用户	    DELETE_PartUser
-
     :param inherit: bool
         是否继承一级权限（permission_classes中的权限类）的认证结果
-        值为True（默认）
-            一级权限通过 则无需验证二级权限
-            一级权限未通过 再验证二级权限
-        值为False
-            无论一级权限通过与否 必须验证二级权限
-
     :param methods: 参见源码
     :param detail: 参见源码
     :param url_path: 参见源码
@@ -115,7 +95,13 @@ def action(methods=None, detail=None, url_path=None, url_name=None, permission=N
             GeneralPermission.__name__ = func.__name__
 
             # 创建Permission表数据
-            prefixes = [('GET', '获取'), ('PUT', '修改'), ('POST', '创建'), ('DELETE', '删除')]
+            prefixes_dict = {
+                'GET': ('GET', '获取'),
+                'PUT': ('PUT', '修改'),
+                'POST': ('POST', '创建'),
+                'DELETE': ('DELETE', '删除')
+            }
+            prefixes = [prefixes_dict[str(meth).upper()] for meth in methods ]
             try:
                 for prefix in prefixes:
                     Permissions.objects.get_or_create(name=f"{prefix[1]}{permission}",
