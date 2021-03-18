@@ -40,9 +40,9 @@ class Role(BaseModel):
     角色表（可作为岗位类型）
     """
 
-    superior = models.ForeignKey("self", blank=True, default="", on_delete=models.SET_DEFAULT,
+    superior = models.ForeignKey("self", blank=True, null=True, on_delete=models.SET_NULL,
                                  related_name="lowerLevel", verbose_name="上级", db_constraint=False)
-    Group = models.ForeignKey("RBAC.Group", blank=True, default="", on_delete=models.SET_DEFAULT,
+    Group = models.ForeignKey("RBAC.Group", blank=True, null=True, on_delete=models.SET_NULL,
                               related_name="Role", verbose_name="分组", db_constraint=False)
     Permissions = models.ManyToManyField("RBAC.Permissions", verbose_name="权限",
                                          through="RBAC.RolePermissions", related_name="Role")
