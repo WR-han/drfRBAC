@@ -98,6 +98,7 @@
 - MySQL 8
 - Django REST framework
 - pymsql
+- PyJWT
 
 <br/>
 
@@ -125,7 +126,7 @@ project_allowed_hosts = []
 
 ### <a id="数据库同步">2.2. 数据库同步</a>
 - migrate并运行项目
-- permissions表会 **自动生成** 13条权限数据（除管理员权限外，其余12条来自**DEMO** 详见TODO注释，可方便定位DEMO位置）
+- permissions表会 **自动生成** 10条权限数据（除 **管理员权限** 外，其余9条来自**DEMO**，详见代码 **TODO** 注释，可方便定位DEMO位置）
 
 |...|name|codeName|
 |--|--|--|
@@ -139,10 +140,6 @@ project_allowed_hosts = []
 |...  |创建特定分组下用户信息|POST_GroupUserPermission|
 |...  |删除特定分组下用户信息|DELETE_GroupUserPermission|
 |...  |获取指定角色用户|GET_role_user|
-|...  |修改指定角色用户|PUT_role_user|
-|...  |创建指定角色用户|POST_role_user|
-|...  |删除指定角色用户|DELETE_role_user|
-
 
 <br/>
 
@@ -155,7 +152,7 @@ project_allowed_hosts = []
 - 请求头中 **携带token** 即可访问DEMO中提供的路由（需要拥有对应权限，否则会被拦截） 👇
 
 ![token](https://img-blog.csdnimg.cn/20210315173833181.jpg#pic_center)
-- DEMO提供 **3个** 案例路由，对应所需权限如下表（每个路由对应 **增删改查** 四种权限）：
+- DEMO提供 **3个** 案例路由，对应所需权限如下表（具体请查看 **[👇3. 权限表数据生成](#权限表数据生成)** ）：
 
 <table>
   <thead>
@@ -204,18 +201,6 @@ project_allowed_hosts = []
       <td rowspan="4">/v1/RBAC/user/role_user/</td>
       <td>获取指定角色用户</td>
       <td>GET_role_user</td>
-    </tr>
-    <tr>
-      <td>修改指定角色用户</td>
-      <td>PUT_role_user</td>
-    </tr>
-    <tr>
-      <td>创建指定角色用户</td>
-      <td>POST_role_user</td>
-    </tr>
-    <tr>
-      <td>删除指定角色用户</td>
-      <td>DELETE_role_user</td>
     </tr>
   </tbody>
 </table>
@@ -432,6 +417,8 @@ class UserPermission(MainPermission):
 - 表字段来源如下：
 	- name => `f"{请求方式对应的中文}{新action装饰器permission参数中的 字符串}"`
 	- codeName => `f"{请求方式}_{被新action装饰器所装饰方法的 方法名 }"`
+- 生成权限数据数量：
+	- 和 **手动创建权限类** 生成数据不同，通用二级权限类 **只会生成** 新action装饰器中 **methods参数** 允许请求方式 **所对应的** 权限数据
 
 ```python
 @action(methods=["get"], detail=False, permission="指定角色用户", inherit=True)
@@ -440,15 +427,11 @@ def role_user(self, request):
         "code": 200
     })
 ```
-
 - 生成的Permissions表数据：
 
 |name|codeName|
 |--|--|
 |获取指定角色用户|GET_role_user|
-|修改指定角色用户|PUT_role_user|
-|创建指定角色用户|POST_role_user|
-|删除指定角色用户|DELETE_role_user|
 
 - 源码位置 `Module_Custom.Custom_Permission.action`
 
