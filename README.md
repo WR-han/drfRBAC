@@ -98,6 +98,7 @@
 - MySQL 8
 - Django REST framework
 - pymsql
+- PyJWT
 
 <br/>
 
