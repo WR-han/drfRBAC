@@ -18,13 +18,14 @@ class User(AccountModel):
         获取全部权限
         :return:
         """
-        my_permissions = [my_pm.codeName for my_pm in self.Permissions.all()]
-        my_role = self.Role.all()
+        # print(self.UserPermissions.filter(isValid=1))
+        self_permissions = [self_pm.Permissions.codeName for self_pm in self.UserPermissions.filter(isValid=1)]
+        self_role = [self_r.Role for self_r in self.UserRole.filter(isValid=1)]
         role_permission = []
-        for dep in my_role:
-            role_permission += [dep_pm.codeName for dep_pm in dep.Permissions.all()]
-        my_permissions += role_permission
-        return my_permissions
+        for dep in self_role:
+            role_permission += [dep_pm.Permissions.codeName for dep_pm in dep.RolePermissions.filter(isValid=1)]
+        self_permissions += role_permission
+        return self_permissions
 
     def __str__(self):
         return f"RBAC_用户_{self.nickName}"
