@@ -223,7 +223,7 @@ project_allowed_hosts = []
 - 为用户分配某一权限，该用户即可用此权限对应的 **请求方式** 访问该权限对应的 **接口**
 - > e.g.  <br/>
 	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色**拥有** <获取全部用户信息GET_UserPermission> 权限时 ，即可对 **/v1/RBAC/user/** 接口进行 **GET** 请求<br/>
-	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色**没有** <创建指定角色用户POST_role_user> 权限时 ，若对 **/v1/RBAC/user/role_user/** 接口进行 **PUT** 请求，则会被**拦截**<br/>
+	 	 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色**没有** <创建特定分组下用户信息POST_GroupUserPermission> 权限时 ，若对 **/v1/RBAC/user/group_user/** 接口进行 **POST** 请求，则会被**拦截**<br/>
 	 
 
 <hr style=" border:solid; width:100px; height:1px;" color=#000000 size=1">
