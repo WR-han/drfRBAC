@@ -57,7 +57,7 @@
 - **RolePermissions** - 角色权限多对多中间表
 - 表关联关系如下：
 
-![数据表关系](https://img-blog.csdnimg.cn/20210312175503638.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1dSaGFu,size_16,color_FFFFFF,t_70#pic_center)
+![数据表关系](https://img-blog.csdnimg.cn/20210319155812248.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1dSaGFu,size_16,color_FFFFFF,t_70#pic_center)
 > 使用 **db_constraint=False** 无物理外键
 
 <br/>
